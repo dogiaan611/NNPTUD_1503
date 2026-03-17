@@ -48,6 +48,25 @@ productSchema.pre('save', async function () {
         this.slug = this.slug + "-" + products.length
     }
 })
+
+productSchema.post('save', async function (doc, next) {
+    try {
+        require('./inventories'); // Ensure model is registered
+        const inventoryModel = mongoose.model('inventory');
+        const existingInventory = await inventoryModel.findOne({ product: doc._id });
+        if (!existingInventory) {
+            await inventoryModel.create({
+                product: doc._id,
+                stock: 0,
+                reserved: 0,
+                soldCount: 0
+            });
+        }
+    } catch (error) {
+        console.error("Error creating inventory:", error);
+    }
+    next();
+})
 module.exports = new mongoose.model(
     'product', productSchema
 )

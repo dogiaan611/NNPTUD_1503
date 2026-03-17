@@ -2,6 +2,7 @@ let userModel = require("../schemas/users");
 let bcrypt = require('bcrypt')
 let jwt = require('jsonwebtoken')
 let fs = require('fs')
+let path = require('path')
 
 module.exports = {
     CreateAnUser: async function (username, password, email, role, fullName, avatarUrl, status, loginCount) {
@@ -43,7 +44,7 @@ module.exports = {
         })
         if (user) {
             if (bcrypt.compareSync(password, user.password)) {
-                let privateKey = fs.readFileSync('private.pem');
+                let privateKey = fs.readFileSync(path.join(__dirname, '..', 'private.pem'));
                 return jwt.sign({
                     id: user.id
                 }, privateKey, {

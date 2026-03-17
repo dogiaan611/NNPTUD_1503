@@ -47,21 +47,25 @@ router.get('/:id', async function (req, res, next) {
 });
 
 router.post('/', async function (req, res, next) {
-  let newProduct = new productModel({
-    title: req.body.title,
-    slug: slugify(req.body.title, {
-      replacement: '-',
-      remove: undefined,
-      lower: true,
-      strict: false,
-    }),
-    price: req.body.price,
-    description: req.body.description,
-    category: req.body.category,
-    images: req.body.images
-  });
-  await newProduct.save();
-  res.send(newProduct)
+  try {
+    let newProduct = new productModel({
+      title: req.body.title,
+      slug: slugify(req.body.title, {
+        replacement: '-',
+        remove: undefined,
+        lower: true,
+        strict: false,
+      }),
+      price: req.body.price,
+      description: req.body.description,
+      category: req.body.category,
+      images: req.body.images
+    });
+    await newProduct.save();
+    res.send(newProduct)
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
 })
 router.put('/:id', async function (req, res, next) {
   try {

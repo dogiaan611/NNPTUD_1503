@@ -28,8 +28,10 @@ app.use('/api/v1/products', require('./routes/products'));
 app.use('/api/v1/categories', require('./routes/categories'));
 app.use('/api/v1/roles', require('./routes/roles'));
 app.use('/api/v1/auth', require('./routes/auth'));
+app.use('/api/v1/inventories', require('./routes/inventories'));
 
-mongoose.connect(process.env.MONGO_URI);
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/NNPTUD-C3';
+mongoose.connect(MONGO_URI);
 
 mongoose.connection.on('connected',()=>{
   console.log("connected");

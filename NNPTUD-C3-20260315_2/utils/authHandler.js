@@ -11,7 +11,8 @@ module.exports = {
                 return;
             }
             token = token.split(' ')[1]
-            let publicKey = fs.readFileSync('public.pem');
+            let path = require('path')
+            let publicKey = fs.readFileSync(path.join(__dirname, '..', 'public.pem'));
             let result = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
             if (result.exp * 1000 < Date.now()) {
                 res.status(403).send({ message: "ban chua dang nhap" })
